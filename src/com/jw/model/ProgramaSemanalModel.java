@@ -21,16 +21,14 @@ public class ProgramaSemanalModel {
      * 
      * @param programa - Uma instância da classe ProgramaSemanalView
      */
-    public static void cadastrarApostila(ProgramaSemanalView programa) {
+    public static void inserir(ProgramaSemanalView programa) {
         try {
-
             ConexaoBD.openConnection();
             Connection conn = ConexaoBD.getConnection();
             Statement stmt = conn.createStatement();
             
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             
-            //System.out.println("Data da Semana: " + sdf.format(programa.getSemana()));
             programa = trataValoresNulos(programa);
             
             String sql = "INSERT INTO programa_semanal (semana, cantico_inicial, cantico_intermediario, cantico_final, "
@@ -65,6 +63,49 @@ public class ProgramaSemanalModel {
             }
         }
     }
+    
+    public static void editar(ProgramaSemanalView programa) {
+        try {
+            ConexaoBD.openConnection();
+            Connection conn = ConexaoBD.getConnection();
+            Statement stmt = conn.createStatement();
+            
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            
+            programa = trataValoresNulos(programa);
+            
+            String sql = "UPDATE programa_semanal SET "
+                       + "cantico_inicial = " + programa.getCanticoInicial() + ", "
+                       + "cantico_intermediario = " + programa.getCanticoIntermediario() + ", "
+                       + "cantico_final = " + programa.getCanticoFinal() + ", "
+                       + "tesouros_discurso_tema = '" + programa.getTesourosDiscursoTema() + "', "
+                       + "ministerio_um_discurso_tema = '" + programa.getMinisterioUmDiscursoTema() + "', "
+                       + "ministerio_tres_discurso_tema = '" + programa.getMinisterioTresDiscursoTema() + "', "
+                       + "vida_parte1_tema = '" + programa.getVidaParte1Tema() + "', "
+                       + "vida_parte1_tempo = " + programa.getVidaParte1Tempo() + ", "
+                       + "vida_parte2_tema = '" + programa.getVidaParte2Tema() + "', "
+                       + "vida_parte2_tempo = " + programa.getVidaParte2Tempo() + " "
+                       + "WHERE semana = '" + sdf.format(programa.getSemana()) + "';";
+            
+            int result = stmt.executeUpdate(sql);
+            if (result == 1) {
+                JOptionPane.showMessageDialog(null, "Dados salvos com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro!");
+            }
+        } catch (SQLException | HeadlessException sqle) {
+            System.out.println(sqle);
+            JOptionPane.showMessageDialog(null, "Erro!");
+        } finally {
+            try {
+                ConexaoBD.closeConnection();
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+    }
+    
+    
     /**
      * Método que retorna todos os dados da semana
      * @param semana - A semana a ser pesquisada

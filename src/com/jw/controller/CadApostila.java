@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 public class CadApostila extends javax.swing.JFrame {
 
     private Date semana = new Date();
+    private String alteracaoInsercao = "";
     
     private Date getSemana() {
         return semana;
@@ -27,6 +28,18 @@ public class CadApostila extends javax.swing.JFrame {
     
     private void setSemana(Date semana) {
         this.semana = semana;
+    }
+    
+    private boolean isAlteracao() {
+        return alteracaoInsercao.equals("A");
+    }
+    
+    private boolean isInsercao() {
+        return alteracaoInsercao.equals("I");
+    }
+    
+    private void setAlteracaoInsercao(String alteracaoInsercao) {
+        this.alteracaoInsercao = alteracaoInsercao;
     }
     
     private String getMesExtenso(int mes) {
@@ -77,6 +90,13 @@ public class CadApostila extends javax.swing.JFrame {
                 txtCanticoFinal.setText(semanaView.getCanticoFinal() + "");
                 txtTesourosDiscurso.setText(semanaView.getTesourosDiscursoTema());
                 txtDesignacaoUm.setText(semanaView.getMinisterioUmDiscursoTema());
+                if (!semanaView.getMinisterioUmDiscursoTema().equals("")) { 
+                    optDesignacaoUm.setSelected(true);
+                } else if (!semanaView.getMinisterioTresDiscursoTema().equals("")) {
+                    optDesignacaoTresDiscurso.setSelected(true);
+                } else {
+                    optDesignacaoTresEstudo.setSelected(true);
+                }
                 txtDesignacaoTres.setText(semanaView.getMinisterioTresDiscursoTema());
                 txtVidaParte1.setText(semanaView.getVidaParte1Tema());
                 txtVidaParte1Tempo.setText(semanaView.getVidaParte1Tempo() + "");
@@ -149,8 +169,9 @@ public class CadApostila extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
         optDesignacaoUm = new javax.swing.JRadioButton();
         txtDesignacaoUm = new javax.swing.JTextField();
-        optDesignacaoTres = new javax.swing.JRadioButton();
+        optDesignacaoTresDiscurso = new javax.swing.JRadioButton();
         txtDesignacaoTres = new javax.swing.JTextField();
+        optDesignacaoTresEstudo = new javax.swing.JRadioButton();
         jPanel7 = new javax.swing.JPanel();
         jLabel38 = new javax.swing.JLabel();
         txtVidaParte1 = new javax.swing.JTextField();
@@ -171,8 +192,9 @@ public class CadApostila extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro Semanal da Apostila");
-        setPreferredSize(new java.awt.Dimension(733, 500));
+        setPreferredSize(new java.awt.Dimension(733, 535));
         setResizable(false);
+        setSize(new java.awt.Dimension(0, 0));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Escolha a Semana"));
 
@@ -287,17 +309,26 @@ public class CadApostila extends javax.swing.JFrame {
 
         txtDesignacaoUm.setEnabled(false);
 
-        buttonGroup1.add(optDesignacaoTres);
-        optDesignacaoTres.setText("Três designações, a terceira sendo discurso com o tema:");
-        optDesignacaoTres.setActionCommand("");
-        optDesignacaoTres.setEnabled(false);
-        optDesignacaoTres.addActionListener(new java.awt.event.ActionListener() {
+        buttonGroup1.add(optDesignacaoTresDiscurso);
+        optDesignacaoTresDiscurso.setText("Três designações, a terceira sendo discurso com o tema:");
+        optDesignacaoTresDiscurso.setActionCommand("");
+        optDesignacaoTresDiscurso.setEnabled(false);
+        optDesignacaoTresDiscurso.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optDesignacaoTresActionPerformed(evt);
+                optDesignacaoTresDiscursoActionPerformed(evt);
             }
         });
 
         txtDesignacaoTres.setEnabled(false);
+
+        buttonGroup1.add(optDesignacaoTresEstudo);
+        optDesignacaoTresEstudo.setText("Três designações (Primeira Visita, Revisita e Estudo Bíblico)");
+        optDesignacaoTresEstudo.setEnabled(false);
+        optDesignacaoTresEstudo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                optDesignacaoTresEstudoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -307,14 +338,19 @@ public class CadApostila extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(optDesignacaoUm)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDesignacaoUm))
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(optDesignacaoUm)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDesignacaoUm))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(optDesignacaoTresDiscurso)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtDesignacaoTres, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)))
+                        .addGap(10, 10, 10))
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(optDesignacaoTres)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtDesignacaoTres, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)))
-                .addGap(10, 10, 10))
+                        .addComponent(optDesignacaoTresEstudo)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -324,8 +360,10 @@ public class CadApostila extends javax.swing.JFrame {
                     .addComponent(optDesignacaoUm)
                     .addComponent(txtDesignacaoUm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(optDesignacaoTresEstudo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(optDesignacaoTres)
+                    .addComponent(optDesignacaoTresDiscurso)
                     .addComponent(txtDesignacaoTres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -340,7 +378,7 @@ public class CadApostila extends javax.swing.JFrame {
 
         txtVidaParte2.setEnabled(false);
 
-        jLabel1.setText("Tempo:");
+        jLabel1.setText("Tempo (min):");
 
         txtVidaParte1Tempo.setEnabled(false);
         txtVidaParte1Tempo.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -356,7 +394,7 @@ public class CadApostila extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setText("Tempo:");
+        jLabel5.setText("Tempo (min):");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -371,7 +409,7 @@ public class CadApostila extends javax.swing.JFrame {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtVidaParte1)
                     .addComponent(txtVidaParte2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -500,7 +538,7 @@ public class CadApostila extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -514,7 +552,7 @@ public class CadApostila extends javax.swing.JFrame {
                     .addComponent(btnAlterar)
                     .addComponent(btnGravar)
                     .addComponent(btnNovo))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -547,7 +585,8 @@ public class CadApostila extends javax.swing.JFrame {
         txtVidaParte2.setEnabled(valor);
         txtVidaParte2Tempo.setEnabled(valor);
         optDesignacaoUm.setEnabled(valor);
-        optDesignacaoTres.setEnabled(valor);
+        optDesignacaoTresEstudo.setEnabled(valor);
+        optDesignacaoTresDiscurso.setEnabled(valor);
     }
     
     private void limpaCampos() {
@@ -573,6 +612,8 @@ public class CadApostila extends javax.swing.JFrame {
         btnGravar.setEnabled(true);
         btnCancelar.setEnabled(true);
         
+        setAlteracaoInsercao("I");
+        
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -597,6 +638,8 @@ public class CadApostila extends javax.swing.JFrame {
         btnAlterar.setEnabled(false);
         btnGravar.setEnabled(true);
         btnCancelar.setEnabled(true);
+        
+        setAlteracaoInsercao("A");
     }//GEN-LAST:event_btnAlterarActionPerformed
 
     private void btnGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGravarActionPerformed
@@ -610,7 +653,7 @@ public class CadApostila extends javax.swing.JFrame {
         
         if (optDesignacaoUm.isSelected()) {
             programa.setMinisterioUmDiscursoTema(txtDesignacaoUm.getText());
-        } else if (optDesignacaoTres.isSelected()) {
+        } else if (optDesignacaoTresDiscurso.isSelected()) {
             programa.setMinisterioTresDiscursoTema(txtDesignacaoTres.getText());
         }
         
@@ -622,7 +665,11 @@ public class CadApostila extends javax.swing.JFrame {
             programa.setVidaParte2Tempo(Integer.parseInt(txtVidaParte2Tempo.getText()));
         }
         
-        ProgramaSemanalModel.cadastrarApostila(programa);
+        if (isInsercao()) {
+            ProgramaSemanalModel.inserir(programa);
+        } else if (isAlteracao()) {
+            ProgramaSemanalModel.editar(programa);
+        }
         
         habilitaDesabilitaCampos(false);
         txtDesignacaoTres.setEnabled(false);
@@ -639,12 +686,12 @@ public class CadApostila extends javax.swing.JFrame {
         txtDesignacaoTres.setEnabled(false);
     }//GEN-LAST:event_optDesignacaoUmActionPerformed
 
-    private void optDesignacaoTresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optDesignacaoTresActionPerformed
+    private void optDesignacaoTresDiscursoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optDesignacaoTresDiscursoActionPerformed
         txtDesignacaoUm.setText("");
         txtDesignacaoTres.setText("");
         txtDesignacaoUm.setEnabled(false);
         txtDesignacaoTres.setEnabled(true);
-    }//GEN-LAST:event_optDesignacaoTresActionPerformed
+    }//GEN-LAST:event_optDesignacaoTresDiscursoActionPerformed
 
     private void btnSemanaProximaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSemanaProximaActionPerformed
         limpaCampos();
@@ -702,6 +749,13 @@ public class CadApostila extends javax.swing.JFrame {
             evt.consume();
         }
     }//GEN-LAST:event_txtVidaParte2TempoKeyTyped
+
+    private void optDesignacaoTresEstudoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optDesignacaoTresEstudoActionPerformed
+        txtDesignacaoUm.setText("");
+        txtDesignacaoTres.setText("");
+        txtDesignacaoUm.setEnabled(false);
+        txtDesignacaoTres.setEnabled(false);
+    }//GEN-LAST:event_optDesignacaoTresEstudoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -761,7 +815,8 @@ public class CadApostila extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JLabel lblSemana;
-    private javax.swing.JRadioButton optDesignacaoTres;
+    private javax.swing.JRadioButton optDesignacaoTresDiscurso;
+    private javax.swing.JRadioButton optDesignacaoTresEstudo;
     private javax.swing.JRadioButton optDesignacaoUm;
     private javax.swing.JTextField txtCanticoFinal;
     private javax.swing.JTextField txtCanticoInicial;

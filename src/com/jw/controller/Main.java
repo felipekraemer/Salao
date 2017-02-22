@@ -1,9 +1,7 @@
 package com.jw.controller;
 
 import com.jw.model.PublicadoresModel;
-import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 /*
@@ -18,6 +16,16 @@ import javax.swing.JOptionPane;
  */
 public class Main extends javax.swing.JFrame {
 
+    String usuario = "";
+    
+    private String getUsuario() {
+        return this.usuario;
+    }
+    
+    private void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+    
     /**
      * Creates new form Main
      */
@@ -330,7 +338,7 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuSobreActionPerformed
 
     private void mnuCadPublicadores1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCadPublicadores1ActionPerformed
-        new CadPublicadores().setVisible(true);
+        new CadPublicadores(getUsuario()).setVisible(true);
     }//GEN-LAST:event_mnuCadPublicadores1ActionPerformed
 
     private void mnuCadLicoes1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuCadLicoes1ActionPerformed
@@ -380,6 +388,8 @@ public class Main extends javax.swing.JFrame {
 
                 this.setTitle(this.getTitle() + "            USUÁRIO: " + nome);
                 JOptionPane.showMessageDialog(this, "Bem-vindo, " + nome + "!");
+                
+                setUsuario(nome);
             } else {
                 txtUsuario.setText("");
                 txtSenha.setText("");

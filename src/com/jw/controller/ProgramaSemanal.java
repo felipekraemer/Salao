@@ -25,6 +25,16 @@ import javax.swing.JOptionPane;
  */
 public class ProgramaSemanal extends javax.swing.JFrame {
 
+    private Date semana = new Date();
+    
+    private Date getSemana() {
+        return semana;
+    }
+    
+    private void setSemana(Date semana) {
+        this.semana = semana;
+    }
+    
     /**
      * Creates new form ProgramaSemanal
      */
@@ -91,14 +101,43 @@ public class ProgramaSemanal extends javax.swing.JFrame {
         cboVidaEstudoDirigente.removeAllItems();
         cboVidaEstudoLeitor.removeAllItems();
     }
-    private Date semana = new Date();
     
-    private Date getSemana() {
-        return semana;
-    }
-    
-    private void setSemana(Date semana) {
-        this.semana = semana;
+    private void habilitaDesabilitaCampos(boolean valor) {
+        cboPresidente.setEnabled(valor);
+        cboOracaoInicial.setEnabled(valor);
+        txtCanticoInicial.setEnabled(valor);
+        txtCanticoIntermediario.setEnabled(valor);
+        txtCanticoFinal.setEnabled(valor);
+        txtComentariosIniciais.setEnabled(valor);
+        txtTesourosDiscursoTema.setEnabled(valor);
+        cboTesourosDiscursoOrador.setEnabled(valor);
+        cboTesourosJoiasOrador.setEnabled(valor);
+        cboTesourosLeituraOrador.setEnabled(valor);
+        cboTesourosLeituraLicao.setEnabled(valor);
+        txtRecapitulacao.setEnabled(valor);
+        cboOracaoFinal.setEnabled(valor);
+        cboMinisterioTresVisitaOrador.setEnabled(valor);
+        cboMinisterioTresVisitaAux.setEnabled(valor);
+        cboMinisterioTresVisitaLicao.setEnabled(valor);
+        cboMinisterioTresRevisitaOrador.setEnabled(valor);
+        cboMinisterioTresRevisitaAux.setEnabled(valor);
+        cboMinisterioTresRevisitaLicao.setEnabled(valor);
+        cboMinisterioTresEstudoOrador.setEnabled(valor);
+        cboMinisterioTresEstudoAux.setEnabled(valor);
+        cboMinisterioTresEstudoLicao.setEnabled(valor);
+        txtMinisterioTresDiscursoTema.setEnabled(valor);
+        cboMinisterioTresDiscursoOrador.setEnabled(valor);
+        cboMinisterioTresDiscursoLicao.setEnabled(valor);
+        cboMinisterioUmDiscursoOrador.setEnabled(valor);
+        txtMinisterioUmDiscursoTema.setEnabled(valor);
+        lblVidaParte1Tempo.setEnabled(valor);
+        lblVidaParte2Tempo.setEnabled(valor);
+        txtVidaParte1Tema.setEnabled(valor);
+        txtVidaParte2Tema.setEnabled(valor);
+        cboVidaParte1Orador.setEnabled(valor);
+        cboVidaParte2Orador.setEnabled(valor);
+        cboVidaEstudoDirigente.setEnabled(valor);
+        cboVidaEstudoLeitor.setEnabled(valor);
     }
     
     private String getMesExtenso(int mes) {
@@ -151,7 +190,6 @@ public class ProgramaSemanal extends javax.swing.JFrame {
                 txtCanticoInicial.setText(semanaView.getCanticoInicial() + "");
                 cboOracaoInicial.setSelectedItem(semanaView.getOracaoInicial());
                 
-                System.out.println(semanaView.getPresidente());
                 if (semanaView.getPresidente() == 0) {
                     txtComentariosIniciais.setText("");
                     txtRecapitulacao.setText("");
@@ -196,8 +234,6 @@ public class ProgramaSemanal extends javax.swing.JFrame {
                     }
                 }
                 
-                
-                
                 //ABA NOSSA VIDA CRISTÃ
                 txtVidaParte1Tema.setText(semanaView.getVidaParte1Tema());
                 lblVidaParte1Tempo.setText(formataNumero(semanaView.getVidaParte1Tempo()) + " min:");
@@ -207,11 +243,12 @@ public class ProgramaSemanal extends javax.swing.JFrame {
                     lblVidaParte2Tempo.setText(formataNumero(semanaView.getVidaParte2Tempo()) + " min:");
                 }
                 btnAlterar.setEnabled(true);
-                
+                btnNovo.setEnabled(false);
                 
             } else {
                 JOptionPane.showMessageDialog(null, "Não foram encontrados dados para a semana de " + intervalo + ".");
                 btnAlterar.setEnabled(false);
+                btnNovo.setEnabled(true);
                 limpaCampos();
             }
 
@@ -605,6 +642,7 @@ public class ProgramaSemanal extends javax.swing.JFrame {
         jLabel36.setText("Tema:");
 
         txtMinisterioTresDiscursoTema.setEditable(false);
+        txtMinisterioTresDiscursoTema.setAutoscrolls(false);
 
         jLabel37.setText("Lição:");
 
@@ -640,13 +678,13 @@ public class ProgramaSemanal extends javax.swing.JFrame {
                                     .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)
                                     .addComponent(jLabel35, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(cboMinisterioTresDiscursoOrador, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(jLabel36, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtMinisterioTresDiscursoTema))
+                                        .addComponent(txtMinisterioTresDiscursoTema, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addComponent(cboMinisterioTresEstudoOrador, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -786,7 +824,6 @@ public class ProgramaSemanal extends javax.swing.JFrame {
         txtVidaParte2Tema.setEditable(false);
 
         txtCanticoIntermediario.setEditable(false);
-        txtCanticoIntermediario.setEnabled(false);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -882,14 +919,17 @@ public class ProgramaSemanal extends javax.swing.JFrame {
 
         btnAlterar.setText("Alterar");
         btnAlterar.setEnabled(false);
+        btnAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarActionPerformed(evt);
+            }
+        });
 
         btnNovo.setText("Novo");
 
         txtCanticoFinal.setEditable(false);
-        txtCanticoFinal.setEnabled(false);
 
         txtCanticoInicial.setEditable(false);
-        txtCanticoInicial.setEnabled(false);
 
         txtComentariosIniciais.setEditable(false);
 
@@ -907,17 +947,17 @@ public class ProgramaSemanal extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboPresidente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtCanticoInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(cboPresidente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(4, 4, 4)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(cboOracaoInicial, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1028,6 +1068,13 @@ public class ProgramaSemanal extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_cboPresidenteActionPerformed
+
+    private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
+        habilitaDesabilitaCampos(true);
+        btnAlterar.setEnabled(false);
+        btnGravar.setEnabled(true);
+        btnCancelar.setEnabled(true);
+    }//GEN-LAST:event_btnAlterarActionPerformed
 
     /**
      * @param args the command line arguments

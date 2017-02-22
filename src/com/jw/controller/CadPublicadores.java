@@ -25,8 +25,35 @@ import com.jw.view.PublicadorView;
  */
 public class CadPublicadores extends javax.swing.JFrame {
     
+    private String usuario = "";
+    private String nomeSelecionado = "";
+    
+    private String getUsuario() {
+        return this.usuario;
+    }
+    
+    private void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+    
+    private String getNomeSelecionado() {
+        return this.nomeSelecionado;
+    }
+    
+    private void setNomeSelecionado(String nomeSelecionado) {
+        this.nomeSelecionado = nomeSelecionado;
+    }
+    
     /** Creates new form CadPublicadores */
     public CadPublicadores() {
+        initComponents();
+        centralizaTela();
+        carregaTabela();
+    }
+    
+    public CadPublicadores (String usuario) {
+        setUsuario(usuario);
+        
         initComponents();
         centralizaTela();
         carregaTabela();
@@ -115,8 +142,13 @@ public class CadPublicadores extends javax.swing.JFrame {
         chbParticipaEscola.setOpaque(true);
         optMasculino.setEnabled(true);
         optFeminino.setEnabled(true);
-        txtUsuario.setEnabled(true);
-        txtUsuario.setEditable(true);
+        
+        //Só deve permitir visualizar / editar se o registro sendo editado é o do usuário logado
+        if (getNomeSelecionado().equals(getUsuario())) {
+            txtUsuario.setEnabled(true);
+            txtUsuario.setEditable(true);
+        }
+        
         txtSenha.setEnabled(true);
         txtSenha.setEditable(true);
     }
@@ -662,8 +694,8 @@ public class CadPublicadores extends javax.swing.JFrame {
      * @param MouseEvent - O evento chamado quando clica-se na tabela
      */
     private void tblRegPublicadoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblRegPublicadoresMouseClicked
-        String nomeSelecionado = (String) tblRegPublicadores.getModel().getValueAt(tblRegPublicadores.getSelectedRow(), tblRegPublicadores.getSelectedColumn());
-        if (!nomeSelecionado.equals("")) {
+        setNomeSelecionado((String) tblRegPublicadores.getModel().getValueAt(tblRegPublicadores.getSelectedRow(), tblRegPublicadores.getSelectedColumn()));
+        if (!getNomeSelecionado().equals("")) {
             int retorno = 0;
             if (txtNome.isEditable()) { //usu�rio estava inserindo / editando dados
                 retorno = JOptionPane.showConfirmDialog(null, "Os dados não salvos serão perdidos. Deseja continuar?");
@@ -740,8 +772,14 @@ public class CadPublicadores extends javax.swing.JFrame {
                     
                     chbParticipaEscola.setSelected(view.getParticipaEscola());
                     
-                    txtUsuario.setText(view.getUsuario());
-                    txtSenha.setText(view.getSenha());
+                    //Só deve permitir visualizar / alterar se o registro sendo alterado é o da pessoa logada
+                    if (getNomeSelecionado().equals(getUsuario())) {
+                        txtUsuario.setText(view.getUsuario());
+                        txtSenha.setText(view.getSenha());
+                    } else {
+                        txtUsuario.setText("");
+                        txtSenha.setText("");
+                    }
                     
                     String situacao = view.getSituacao();
                     switch (situacao) {
