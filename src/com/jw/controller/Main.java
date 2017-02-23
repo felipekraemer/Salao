@@ -377,7 +377,7 @@ public class Main extends javax.swing.JFrame {
         }
         
         if (pesquisar) {
-            String nome = PublicadoresModel.pesquisar(usuario, senha);
+            String nome = PublicadoresModel.pesquisarUsuario(usuario, senha);
             
             if (!nome.equals("")) {
                 frmLogin.dispose();

@@ -217,7 +217,7 @@ public class PublicadoresModel {
      * @param senha   - A senha do publicador
      * @return String - O nome do publicador
      */
-    public static String pesquisar(String usuario, String senha) {
+    public static String pesquisarUsuario(String usuario, String senha) {
         try {
             ConexaoBD.openConnection();
             Connection conn = ConexaoBD.getConnection();
@@ -321,16 +321,27 @@ public class PublicadoresModel {
     }
     
     /**
-     * Método que retorna todos os anciãos existentes
-     * @return ArrayList - Lista contendo todos os anciãos existentes
+     * Método que retorna uma lista de publicadores e seus códigos baseado nos priviégios e no sexo procurados
+     * 
+     * @param privilegios Os privilégios a serem buscados. Podem ser:<br>
+     * ANC = Ancião<br>
+     * SEM = Servo Ministerial<br>
+     * PUB = Publicador Batizado<br>
+     * PNB = Publicador Não Batizado<br><br>
+     * O parâmetro deve seguir o seguinte exemplo: "'ANC', 'SEM', 'PUB', 'PNB'"<br>
+     * @param sexo O sexo a ser buscado. Pode ser:<br>
+     * M = Masculino
+     * F = Feminino
+     * * O parâmetro deve seguir o seguinte exemplo: "'M', 'F'"<br>
+     * @return Um ArrayList da classe PublicadorView contendo os publicadores encontrados.
      */
-    public static ArrayList<PublicadorView> pesquisarAnciaos() {
+    public static ArrayList<PublicadorView> pesquisar(String privilegios, String sexo) {
         try {
             ConexaoBD.openConnection();
             Connection conn = ConexaoBD.getConnection();
             
-            String sql = "SELECT nome FROM publicadores WHERE privilegio = 'ANC' ORDER BY nome";
-        
+            String sql = "SELECT codigo, nome FROM publicadores WHERE privilegio in (" + privilegios + ") and sexo in (" + sexo + ") ORDER BY nome";
+            
             Statement stmt;
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
@@ -341,145 +352,15 @@ public class PublicadoresModel {
                 publicadores = new ArrayList();
                 while (rs.next()) {
                     PublicadorView fields = new PublicadorView();
-                    fields.setNome(rs.getString("nome"));                    
+                    fields.setCodigo(rs.getInt("codigo"));
+                    fields.setNome(rs.getString("nome"));
                     publicadores.add(fields);
                 }
             }
             
             return publicadores;
-        } catch (SQLException sqle) {
-            System.out.println(sqle);
-            JOptionPane.showMessageDialog(null, "Erro!");
-            return null;
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, "Erro!");
-            return null;
-        } finally {
-            try {
-                ConexaoBD.closeConnection();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-    }
-    
-    /**
-     * Método que retorna todos os anciãos e servos ministeriais existentes
-     * @return ArrayList - Lista contendo todos os anciãos e servos ministeriais existentes
-     */
-    public static ArrayList<PublicadorView> pesquisarAnciaosEServos() {
-        try {
-            ConexaoBD.openConnection();
-            Connection conn = ConexaoBD.getConnection();
             
-            String sql = "SELECT nome FROM publicadores WHERE privilegio in ('ANC', 'SEM') ORDER BY nome";
-        
-            Statement stmt;
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            
-            ArrayList publicadores = null;
-            
-            if (rs != null) {
-                publicadores = new ArrayList();
-                while (rs.next()) {
-                    PublicadorView fields = new PublicadorView();
-                    fields.setNome(rs.getString("nome"));                    
-                    publicadores.add(fields);
-                }
-            }
-            
-            return publicadores;
-        } catch (SQLException sqle) {
-            System.out.println(sqle);
-            JOptionPane.showMessageDialog(null, "Erro!");
-            return null;
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, "Erro!");
-            return null;
-        } finally {
-            try {
-                ConexaoBD.closeConnection();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-    }
-    
-    /**
-     * Método que retorna todos os anciãos, servos ministeriais e publicadores batizados existentes
-     * @return ArrayList - Lista contendo todos os anciãos, servos ministeriais e publicadores batizados existentes
-     */
-    public static ArrayList<PublicadorView> pesquisarAnciaosServosEPublicadoresBatizados() {
-        try {
-            ConexaoBD.openConnection();
-            Connection conn = ConexaoBD.getConnection();
-            
-            String sql = "SELECT nome FROM publicadores WHERE privilegio in ('ANC', 'SEM', 'PUB') AND sexo = 'M' ORDER BY nome";
-        
-            Statement stmt;
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            
-            ArrayList publicadores = null;
-            
-            if (rs != null) {
-                publicadores = new ArrayList();
-                while (rs.next()) {
-                    PublicadorView fields = new PublicadorView();
-                    fields.setNome(rs.getString("nome"));                    
-                    publicadores.add(fields);
-                }
-            }
-            
-            return publicadores;
-        } catch (SQLException sqle) {
-            System.out.println(sqle);
-            JOptionPane.showMessageDialog(null, "Erro!");
-            return null;
-        } catch (Exception e) {
-            System.out.println(e);
-            JOptionPane.showMessageDialog(null, "Erro!");
-            return null;
-        } finally {
-            try {
-                ConexaoBD.closeConnection();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
-        }
-    }
-    
-    /**
-     * Método que retorna todos os varões existentes exceto anciãos
-     * @return ArrayList - Lista contendo todos os varões existentes exceto anciãos
-     */
-    public static ArrayList<PublicadorView> pesquisarVaroesExcetoAnciaos() {
-        try {
-            ConexaoBD.openConnection();
-            Connection conn = ConexaoBD.getConnection();
-            
-            String sql = "SELECT nome FROM publicadores WHERE privilegio in ('SEM', 'PUB', 'PNB') AND sexo = 'M' ORDER BY nome";
-        
-            Statement stmt;
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            
-            ArrayList publicadores = null;
-            
-            if (rs != null) {
-                publicadores = new ArrayList();
-                while (rs.next()) {
-                    PublicadorView fields = new PublicadorView();
-                    fields.setNome(rs.getString("nome"));                    
-                    publicadores.add(fields);
-                }
-            }
-            
-            return publicadores;
-        } catch (SQLException sqle) {
+            } catch (SQLException sqle) {
             System.out.println(sqle);
             JOptionPane.showMessageDialog(null, "Erro!");
             return null;

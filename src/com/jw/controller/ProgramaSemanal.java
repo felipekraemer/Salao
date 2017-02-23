@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 /**
@@ -26,44 +29,44 @@ import javax.swing.JOptionPane;
 public class ProgramaSemanal extends javax.swing.JFrame {
 
     private Date semana = new Date();
-    
+
     private Date getSemana() {
         return semana;
     }
-    
+
     private void setSemana(Date semana) {
         this.semana = semana;
     }
-    
+
     /**
      * Creates new form ProgramaSemanal
      */
     public ProgramaSemanal() {
         initComponents();
         centralizaTela();
-        
+
         // Busca a segunda-feira da semana atual
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
         int mondayNo = c.get(Calendar.DAY_OF_MONTH) - c.get(Calendar.DAY_OF_WEEK) + 2;
-        
+
         // Ajusta a data atual para a segunda-feira da semana semana atual
         c.set(Calendar.DAY_OF_MONTH, mondayNo);
         setSemana(c.getTime());
-        
+
         carregaSemana();
     }
-    
+
     private void centralizaTela() {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         int w = this.getSize().width;
         int h = this.getSize().height;
         int x = (dim.width - w) / 2;
         int y = (dim.height - h) / 2;
-        
+
         this.setLocation(x, y);
     }
-    
+
     private void limpaCampos() {
         cboPresidente.removeAllItems();
         cboOracaoInicial.removeAllItems();
@@ -101,7 +104,7 @@ public class ProgramaSemanal extends javax.swing.JFrame {
         cboVidaEstudoDirigente.removeAllItems();
         cboVidaEstudoLeitor.removeAllItems();
     }
-    
+
     private void habilitaDesabilitaCampos(boolean valor) {
         cboPresidente.setEnabled(valor);
         cboOracaoInicial.setEnabled(valor);
@@ -138,80 +141,94 @@ public class ProgramaSemanal extends javax.swing.JFrame {
         cboVidaParte2Orador.setEnabled(valor);
         cboVidaEstudoDirigente.setEnabled(valor);
         cboVidaEstudoLeitor.setEnabled(valor);
+
     }
-    
+
     private String getMesExtenso(int mes) {
         switch (mes) {
-            case 1: return "Janeiro";
-            case 2: return "Fevereiro";
-            case 3: return "Março";
-            case 4: return "Abril";
-            case 5: return "Maio";
-            case 6: return "Junho";
-            case 7: return "Julho";
-            case 8: return "Agosto";
-            case 9: return "Setembro";
-            case 10: return "Outubro";
-            case 11: return "Novembro";
-            case 12: return "Dezembro";
-            default: return "";
+            case 1:
+                return "Janeiro";
+            case 2:
+                return "Fevereiro";
+            case 3:
+                return "Março";
+            case 4:
+                return "Abril";
+            case 5:
+                return "Maio";
+            case 6:
+                return "Junho";
+            case 7:
+                return "Julho";
+            case 8:
+                return "Agosto";
+            case 9:
+                return "Setembro";
+            case 10:
+                return "Outubro";
+            case 11:
+                return "Novembro";
+            case 12:
+                return "Dezembro";
+            default:
+                return "";
         }
     }
-    
+
     private void carregaSemana() {
         try {
             String intervalo = "";
-            
+
             Calendar c = Calendar.getInstance();
             c.setTime(getSemana());
             Date dataPesquisa = getSemana();
-            
+
             int diaInicial = c.get(Calendar.DAY_OF_MONTH);
             int mesInicial = c.get(Calendar.MONTH) + 1;
-            
+
             c.add(Calendar.DATE, 6);
             int diaFinal = c.get(Calendar.DAY_OF_MONTH);
             int mesFinal = c.get(Calendar.MONTH) + 1;
-            
+
             if (mesInicial == mesFinal) {
                 intervalo += diaInicial + " - " + diaFinal + " de " + getMesExtenso(mesFinal);
             } else {
                 intervalo += diaInicial + " de " + getMesExtenso(mesInicial) + " - " + diaFinal + " de " + getMesExtenso(mesFinal);
             }
-            
+
             lblSemana.setText(intervalo);
-            
+
             ProgramaSemanalView semanaView = ProgramaSemanalModel.pesquisar(dataPesquisa);
             if (semanaView != null) {
                 carregaLicoes();
                 carregaPublicadores();
-                
+
                 cboPresidente.setSelectedItem(semanaView.getPresidente());
                 txtCanticoInicial.setText(semanaView.getCanticoInicial() + "");
                 cboOracaoInicial.setSelectedItem(semanaView.getOracaoInicial());
-                
+
                 if (semanaView.getPresidente() == 0) {
                     txtComentariosIniciais.setText("");
                     txtRecapitulacao.setText("");
                 }
-                
+
                 txtCanticoIntermediario.setText(semanaView.getCanticoIntermediario() + "");
                 txtCanticoFinal.setText(semanaView.getCanticoFinal() + "");
-                
+
                 //ABA TESOUROS DA PALAVRA DE DEUS
                 txtTesourosDiscursoTema.setText(semanaView.getTesourosDiscursoTema());
                 cboTesourosDiscursoOrador.setSelectedItem(semanaView.getTesourosDiscursoOrador());
                 cboTesourosJoiasOrador.setSelectedItem(semanaView.getTesourosJoiasOrador());
                 cboTesourosLeituraOrador.setSelectedItem(semanaView.getTesourosLeituraOrador());
                 cboTesourosLeituraLicao.setSelectedItem(semanaView.getTesourosLeituraLicao());
-                
+
                 //ABA FAÇA SEU MELHOR NO MINISTÉRIO
-                
                 if (!semanaView.getMinisterioUmDiscursoTema().equals("")) {
                     //SE FOR DESIGNAÇÃO ÚNICA, DE 15 MINUTOS
                     txtMinisterioUmDiscursoTema.setText(semanaView.getMinisterioUmDiscursoTema());
                     cboMinisterioUmDiscursoOrador.setSelectedItem(semanaView.getMinisterioUmDiscursoOrador());
                     
+
                 } else {
                     //SEMPRE TEM VISITA E REVISITA
                     cboMinisterioTresVisitaOrador.setSelectedItem(semanaView.getMinisterioTresVisitaOrador());
@@ -220,20 +237,20 @@ public class ProgramaSemanal extends javax.swing.JFrame {
                     cboMinisterioTresRevisitaOrador.setSelectedItem(semanaView.getMinisterioTresRevisitaOrador());
                     cboMinisterioTresRevisitaAux.setSelectedItem(semanaView.getMinisterioTresRevisitaAux());
                     cboMinisterioTresRevisitaLicao.setSelectedItem(semanaView.getMinisterioTresRevisitaLicao());
-                    
+
                     //A TERCEIRA PARTE PODE SER ESTUDO BÍBLICO OU DISCURSO
                     if (!semanaView.getMinisterioTresDiscursoTema().equals("")) {
                         cboMinisterioTresDiscursoOrador.setSelectedItem(semanaView.getMinisterioTresDiscursoOrador());
                         txtMinisterioTresDiscursoTema.setText(semanaView.getMinisterioTresDiscursoTema());
                         cboMinisterioTresDiscursoLicao.setSelectedItem(semanaView.getMinisterioTresDiscursoLicao());
-                        
+
                     } else {
                         cboMinisterioTresEstudoOrador.setSelectedItem(semanaView.getMinisterioTresEstudoOrador());
                         cboMinisterioTresEstudoAux.setSelectedItem(semanaView.getMinisterioTresEstudoAux());
                         cboMinisterioTresEstudoLicao.setSelectedItem(semanaView.getMinisterioTresEstudoLicao());
                     }
                 }
-                
+
                 //ABA NOSSA VIDA CRISTÃ
                 txtVidaParte1Tema.setText(semanaView.getVidaParte1Tema());
                 lblVidaParte1Tempo.setText(formataNumero(semanaView.getVidaParte1Tempo()) + " min:");
@@ -244,11 +261,14 @@ public class ProgramaSemanal extends javax.swing.JFrame {
                 }
                 btnAlterar.setEnabled(true);
                 btnNovo.setEnabled(false);
-                
+                btnGravar.setEnabled(false);
+                btnCancelar.setEnabled(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Não foram encontrados dados para a semana de " + intervalo + ".");
                 btnAlterar.setEnabled(false);
                 btnNovo.setEnabled(true);
+                btnGravar.setEnabled(false);
+                btnCancelar.setEnabled(false);
                 limpaCampos();
             }
 
@@ -256,79 +276,139 @@ public class ProgramaSemanal extends javax.swing.JFrame {
             System.out.println(e);
             JOptionPane.showMessageDialog(null, "Um erro ocorreu ao executar esta operação.");
         }
-        
+
     }
-    
+
     private void carregaLicoes() {
-        cboMinisterioTresEstudoLicao.addItem("Selecione...");
-        cboMinisterioTresRevisitaLicao.addItem("Selecione...");
-        cboMinisterioTresVisitaLicao.addItem("Selecione...");
-        cboMinisterioTresDiscursoLicao.addItem("Selecione...");
-        cboTesourosLeituraLicao.addItem("Selecione...");
+
+        Vector comboBoxItems = new Vector();
+        comboBoxItems.add(0, "Selecione...");
+
         ArrayList<LicaoView> licoes = LicoesModel.pesquisarTodas();
+
         if (licoes != null && !licoes.isEmpty()) {
             Iterator it = licoes.iterator();
             while (it.hasNext()) {
                 LicaoView view = (LicaoView) it.next();
-                cboMinisterioTresEstudoLicao.addItem(formataNumero(view.getNumero()) + " - " + view.getDescricao());
-                cboMinisterioTresRevisitaLicao.addItem(formataNumero(view.getNumero()) + " - " + view.getDescricao());
-                cboMinisterioTresVisitaLicao.addItem(formataNumero(view.getNumero()) + " - " + view.getDescricao());
-                cboMinisterioTresDiscursoLicao.addItem(formataNumero(view.getNumero()) + " - " + view.getDescricao());
-                cboTesourosLeituraLicao.addItem(formataNumero(view.getNumero()) + " - " + view.getDescricao());
+                comboBoxItems.add(new Item(view.getNumero(), formataNumero(view.getNumero()) + " - " + view.getDescricao()));
             }
+
+            cboMinisterioTresEstudoLicao.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboMinisterioTresRevisitaLicao.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboMinisterioTresVisitaLicao.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboMinisterioTresDiscursoLicao.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboTesourosLeituraLicao.setModel(new DefaultComboBoxModel(comboBoxItems));
         }
     }
-    
+
     private void carregaPublicadores() {
-        cboPresidente.addItem("Selecione ancião...");
-        cboOracaoInicial.addItem("Selecione ancião, servo ministerial, ou publicador batizado...");
-        cboOracaoFinal.addItem("Selecione ancião, servo ministerial, ou publicador batizado...");
-        cboTesourosDiscursoOrador.addItem("Selecione ancião ou servo ministerial...");
-        cboTesourosJoiasOrador.addItem("Selecione ancião ou servo ministerial...");
-        cboTesourosLeituraOrador.addItem("Selecione servo ministerial, publicador batizado ou não batizado...");
         
-        ArrayList<PublicadorView> publicadores = PublicadoresModel.pesquisarAnciaos();
-        if (publicadores != null && !publicadores.isEmpty()) {
-            Iterator it = publicadores.iterator();
-            while (it.hasNext()) {
-                PublicadorView view = (PublicadorView) it.next();
-                cboPresidente.addItem(view.getNome());
-            }
-        }
-        
-        publicadores = PublicadoresModel.pesquisarAnciaosEServos();
-        if (publicadores != null && !publicadores.isEmpty()) {
-            Iterator it = publicadores.iterator();
-            while (it.hasNext()) {
-                PublicadorView view = (PublicadorView) it.next();
-                cboTesourosDiscursoOrador.addItem(view.getNome());
-                cboTesourosJoiasOrador.addItem(view.getNome());
-            }
-        }
-        
-        publicadores = PublicadoresModel.pesquisarAnciaosServosEPublicadoresBatizados();
-        if (publicadores != null && !publicadores.isEmpty()) {
-            Iterator it = publicadores.iterator();
-            while (it.hasNext()) {
-                PublicadorView view = (PublicadorView) it.next();
-                cboOracaoInicial.addItem(view.getNome());
-                cboOracaoFinal.addItem(view.getNome());
-            }
-        }
-        
-        publicadores = PublicadoresModel.pesquisarVaroesExcetoAnciaos();
+        Vector comboBoxItems = new Vector();
+        comboBoxItems.add(0, "Selecione...");
+
+        ArrayList<PublicadorView> publicadores = PublicadoresModel.pesquisar("'ANC'", "'M'");
         
         if (publicadores != null && !publicadores.isEmpty()) {
             Iterator it = publicadores.iterator();
             while (it.hasNext()) {
                 PublicadorView view = (PublicadorView) it.next();
-                cboTesourosLeituraOrador.addItem(view.getNome());
+                comboBoxItems.add(new Item(Integer.parseInt(view.getCodigo() + ""), view.getNome()));
             }
+            cboPresidente.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboVidaParte1Orador.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboVidaParte2Orador.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboVidaEstudoDirigente.setModel(new DefaultComboBoxModel(comboBoxItems));
+            
+        }
+
+        comboBoxItems = new Vector();
+        comboBoxItems.add(0, "Selecione...");
+        
+        publicadores = PublicadoresModel.pesquisar("'ANC', 'SEM'", "'M'");
+        if (publicadores != null && !publicadores.isEmpty()) {
+            Iterator it = publicadores.iterator();
+            while (it.hasNext()) {
+                PublicadorView view = (PublicadorView) it.next();
+                comboBoxItems.add(new Item(Integer.parseInt(view.getCodigo() + ""), view.getNome()));
+            }
+            cboTesourosDiscursoOrador.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboTesourosJoiasOrador.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboMinisterioUmDiscursoOrador.setModel(new DefaultComboBoxModel(comboBoxItems));
+        }
+
+        comboBoxItems = new Vector();
+        comboBoxItems.add(0, "Selecione...");
+        
+        publicadores = PublicadoresModel.pesquisar("'ANC', 'SEM', 'PUB'", "'M'");
+        if (publicadores != null && !publicadores.isEmpty()) {
+            Iterator it = publicadores.iterator();
+            while (it.hasNext()) {
+                PublicadorView view = (PublicadorView) it.next();
+                comboBoxItems.add(new Item(Integer.parseInt(view.getCodigo() + ""), view.getNome()));
+            }
+            cboOracaoInicial.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboOracaoFinal.setModel(new DefaultComboBoxModel(comboBoxItems));
+        }
+
+        comboBoxItems = new Vector();
+        comboBoxItems.add(0, "Selecione...");
+        
+        publicadores = PublicadoresModel.pesquisar("'SEM', 'PUB', 'PNB'", "'M'");
+        if (publicadores != null && !publicadores.isEmpty()) {
+            Iterator it = publicadores.iterator();
+            while (it.hasNext()) {
+                PublicadorView view = (PublicadorView) it.next();
+                comboBoxItems.add(new Item(Integer.parseInt(view.getCodigo() + ""), view.getNome()));
+            }
+            cboTesourosLeituraOrador.setModel(new DefaultComboBoxModel(comboBoxItems));
         }
         
+        comboBoxItems = new Vector();
+        comboBoxItems.add(0, "Selecione...");
+        
+        publicadores = PublicadoresModel.pesquisar("'SEM', 'PUB'", "'M'");
+        if (publicadores != null && !publicadores.isEmpty()) {
+            Iterator it = publicadores.iterator();
+            while (it.hasNext()) {
+                PublicadorView view = (PublicadorView) it.next();
+                comboBoxItems.add(new Item(Integer.parseInt(view.getCodigo() + ""), view.getNome()));
+            }
+            cboMinisterioTresDiscursoOrador.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboVidaEstudoLeitor.setModel(new DefaultComboBoxModel(comboBoxItems));
+        }
+        
+        comboBoxItems = new Vector();
+        comboBoxItems.add(0, "Selecione...");
+        
+        publicadores = PublicadoresModel.pesquisar("'SEM', 'PUB'", "'M', 'F'");
+        if (publicadores != null && !publicadores.isEmpty()) {
+            Iterator it = publicadores.iterator();
+            while (it.hasNext()) {
+                PublicadorView view = (PublicadorView) it.next();
+                comboBoxItems.add(new Item(Integer.parseInt(view.getCodigo() + ""), view.getNome()));
+            }
+            cboMinisterioTresVisitaOrador.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboMinisterioTresRevisitaOrador.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboMinisterioTresEstudoOrador.setModel(new DefaultComboBoxModel(comboBoxItems));
+        }
+        
+        comboBoxItems = new Vector();
+        comboBoxItems.add(0, "Selecione...");
+        
+        publicadores = PublicadoresModel.pesquisar("'SEM', 'PUB', 'PNB'", "'M', 'F'");
+        if (publicadores != null && !publicadores.isEmpty()) {
+            Iterator it = publicadores.iterator();
+            while (it.hasNext()) {
+                PublicadorView view = (PublicadorView) it.next();
+                comboBoxItems.add(new Item(Integer.parseInt(view.getCodigo() + ""), view.getNome()));
+            }
+            cboMinisterioTresVisitaAux.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboMinisterioTresRevisitaAux.setModel(new DefaultComboBoxModel(comboBoxItems));
+            cboMinisterioTresEstudoAux.setModel(new DefaultComboBoxModel(comboBoxItems));
+        }
         
     }
-    
+
     private String formataNumero(int numero) {
         if (numero <= 9) {
             return "0" + numero;
@@ -513,6 +593,11 @@ public class ProgramaSemanal extends javax.swing.JFrame {
         jLabel8.setText("Leitura da Bíblia");
 
         cboTesourosLeituraLicao.setEnabled(false);
+        cboTesourosLeituraLicao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cboTesourosLeituraLicaoActionPerformed(evt);
+            }
+        });
 
         jLabel32.setText("Lição:");
 
@@ -1066,7 +1151,7 @@ public class ProgramaSemanal extends javax.swing.JFrame {
             txtComentariosIniciais.setText(cboPresidente.getSelectedItem().toString());
             txtRecapitulacao.setText(cboPresidente.getSelectedItem().toString());
         }
-        
+
     }//GEN-LAST:event_cboPresidenteActionPerformed
 
     private void btnAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarActionPerformed
@@ -1075,6 +1160,16 @@ public class ProgramaSemanal extends javax.swing.JFrame {
         btnGravar.setEnabled(true);
         btnCancelar.setEnabled(true);
     }//GEN-LAST:event_btnAlterarActionPerformed
+
+    private void cboTesourosLeituraLicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboTesourosLeituraLicaoActionPerformed
+        JComboBox comboBox = (JComboBox) evt.getSource();
+        if (!comboBox.getSelectedItem().equals("Selecione...")) {
+            Item item = (Item) comboBox.getSelectedItem();
+            System.out.println(item.getId() + " : " + item.getDescricao());
+        } else {
+            System.out.println("0 : 0 - Selecione...");
+        }
+    }//GEN-LAST:event_cboTesourosLeituraLicaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1109,6 +1204,29 @@ public class ProgramaSemanal extends javax.swing.JFrame {
                 new ProgramaSemanal().setVisible(true);
             }
         });
+    }
+
+    class Item {
+
+        private int id;
+        private String descricao;
+
+        public Item(int id, String descricao) {
+            this.id = id;
+            this.descricao = descricao;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getDescricao() {
+            return descricao;
+        }
+
+        public String toString() {
+            return descricao;
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
