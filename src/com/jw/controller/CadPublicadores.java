@@ -17,6 +17,7 @@ import java.util.Iterator;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import com.jw.model.PublicadoresModel;
+import com.jw.util.CriptografiaSHA256;
 import com.jw.view.PublicadorView;
 
 /**
@@ -919,7 +920,7 @@ public class CadPublicadores extends javax.swing.JFrame {
             view.setParticipaEscola(chbParticipaEscola.isSelected());
             
             view.setUsuario(txtUsuario.getText());
-            view.setSenha(txtSenha.getText());
+            view.setSenha(CriptografiaSHA256.criptografar(txtSenha.getText()));
             
             if (isInsercao()) {
                 PublicadoresModel.inserir(view);
